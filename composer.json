@@ -11,14 +11,14 @@
     "repositories": [
         {
             "type": "path",
-            "url": "/home/gustavo/Sites/nativephp-launcher/_core",
+            "url": "./_core",
             "options": {
                 "symlink": true
             }
         },
         {
             "type": "path",
-            "url": "/home/gustavo/Sites/nativephp-launcher/_plugins/heroicons-finder",
+            "url": "./_plugins/heroicons-finder",
             "options": {
                 "symlink": true
             }
