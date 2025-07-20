@@ -30,8 +30,8 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
         "nativephp/electron": "^1.1",
-        "gustavo-launcher/core": "dev-main",
-        "tailwindlabs/heroicons-finder": "dev-main"
+        "gustavo-launcher/core": "*",
+        "tailwindlabs/heroicons-finder": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

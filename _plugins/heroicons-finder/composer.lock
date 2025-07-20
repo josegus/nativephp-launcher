@@ -1,0 +1,43 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e64317775f998e8e56be5a5f7bf70e0e",
+    "packages": [
+        {
+            "name": "gustavo-launcher/core",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../../_core",
+                "reference": "d8fb0f5d6bbcfe8b26bf018a5e19be547dcc629b"
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NativePHPLauncher\\Core\\": "src/"
+                }
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {},
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "^8.1"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}

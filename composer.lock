@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24844c173e72a0edf0ae3b7c95608589",
+    "content-hash": "5f88f3f83af54ceb5a20a1e126e46950",
     "packages": [
         {
             "name": "brick/math",
@@ -645,11 +645,11 @@
         },
         {
             "name": "gustavo-launcher/core",
-            "version": "dev-main",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
-                "url": "/home/gustavo/Sites/nativephp-launcher/_core",
-                "reference": "13e236b79322f1672b6287196ad205947a40d948"
+                "url": "./_core",
+                "reference": "d8fb0f5d6bbcfe8b26bf018a5e19be547dcc629b"
             },
             "require": {
                 "php": "^8.1"
@@ -662,7 +662,7 @@
             },
             "transport-options": {
                 "symlink": true,
-                "relative": false
+                "relative": true
             }
         },
         {
@@ -1479,16 +1479,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405"
+                "reference": "10732241927d3971d28e7ea7b5712721fa2296ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
-                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/10732241927d3971d28e7ea7b5712721fa2296ca",
+                "reference": "10732241927d3971d28e7ea7b5712721fa2296ca",
                 "shasum": ""
             },
             "require": {
@@ -1517,7 +1517,7 @@
                 "symfony/process": "^5.4 | ^6.0 | ^7.0",
                 "symfony/yaml": "^2.3 | ^3.0 | ^4.0 | ^5.0 | ^6.0 | ^7.0",
                 "unleashedtech/php-coding-standard": "^3.1.1",
-                "vimeo/psalm": "^4.24.0 || ^5.0.0"
+                "vimeo/psalm": "^4.24.0 || ^5.0.0 || ^6.0.0"
             },
             "suggest": {
                 "symfony/yaml": "v2.3+ required if using the Front Matter extension"
@@ -1582,7 +1582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-05T12:20:28+00:00"
+            "time": "2025-07-20T12:47:49+00:00"
         },
         {
             "name": "league/config",
@@ -5983,14 +5983,14 @@
         },
         {
             "name": "tailwindlabs/heroicons-finder",
-            "version": "dev-main",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
-                "url": "/home/gustavo/Sites/nativephp-launcher/_plugins/heroicons-finder",
-                "reference": "ba9f7192bbb82208f186d024b9ca444af9b2f729"
+                "url": "./_plugins/heroicons-finder",
+                "reference": "618313d4eb531d292e4533e3ff52332ae3dfa5f3"
             },
             "require": {
-                "gustavo-launcher/core": "dev-main",
+                "gustavo-launcher/core": "*",
                 "php": "^8.1"
             },
             "type": "library",
@@ -6001,7 +6001,7 @@
             },
             "transport-options": {
                 "symlink": true,
-                "relative": false
+                "relative": true
             }
         },
         {
@@ -8592,10 +8592,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "gustavo-launcher/core": 20,
-        "tailwindlabs/heroicons-finder": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
