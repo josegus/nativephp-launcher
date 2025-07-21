@@ -13,13 +13,16 @@ use TailwindLabs\HeroiconsFinder\HeroiconsFinder;
 
 class Launcher extends Component
 {
-    public string $query = '';
+    public string $query = 'hi user';
 
-    protected PluginManager $pluginManager;
+    public array $output = [];
+
+    //protected ?PluginManager $pluginManager = null;
 
     public function mount(): void
     {
-        $this->pluginManager = new PluginManager;
+        //$this->pluginManager = new PluginManager;
+        //$this->pluginManager = app(PluginManager::class);
     }
 
     public function render(): View
@@ -27,12 +30,34 @@ class Launcher extends Component
         return view('livewire.launcher');
     }
 
+    // helpers
+
+    protected function pluginManager(): PluginManager
+    {
+        return app(PluginManager::class);
+    }
+
     // computed
 
     #[Computed(persist: true)]
     public function keywords(): array
     {
-        return $this->pluginManager->keywords();
+        return $this->pluginManager()->keywords();
+    }
+
+    // hooks
+
+    public function updatedQuery(): void
+    {
+        $plugin = $this->pluginManager()->match($this->query);
+
+        if (is_null($plugin)) {
+            return;
+        }
+
+        $argument = 'user';
+
+        $this->output = $plugin->handle($argument);
     }
 
     // actions

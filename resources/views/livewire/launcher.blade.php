@@ -8,4 +8,12 @@
             @json($this->keywords)
         </pre>
     </div>
+
+    <section>
+        <ul>
+            @foreach ($output as $item)
+                <li wire:key="item-{{ $loop->index }}" class="hover:bg-gray-200 border px-6 py-4">{!! $item !!}</li>
+            @endforeach
+        </ul>
+    </section>
 </div>

@@ -3,14 +3,23 @@
 namespace App;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use NativePHPLauncher\Core\Plugin;
 
 class PluginManager
 {
-    /** @var array<string> */
+    /**
+     * Directories (folders) found that contain the root folder of each plugin.
+     *
+     * @var array<string>
+     */
     protected array $directories = [];
 
-    /** @var array<string> */
+    /**
+     * Main classes found for each plugin, including full namespace.
+     *
+     * @var array<string>
+     */
     protected array $classes = [];
 
     /** @var array<string, \Launcher\Plugin> */
@@ -21,20 +30,6 @@ class PluginManager
         $this->loadDirectories();
 
         $this->loadClasses();
-
-        // Cargar todas las clases de app/LauncherPlugins
-        /* foreach (glob(base_path('_plugins') . '/*.php') as $file) {
-            $class = $this->classFromFile($file);
-
-            if (class_exists($class)) {
-                $instance = app($class);
-
-                if ($instance instanceof Plugin) {
-                    $keyword = strtolower($instance->keyword());
-                    $this->plugins[$keyword] = $instance;
-                }
-            }
-        } */
     }
 
     private function loadDirectories(): void
@@ -80,14 +75,29 @@ class PluginManager
         return $this->classes;
     }
 
+    /**
+     * Get the list of keywords with its respective trigger class.
+     *
+     * @return array<string, \NativePHPLauncher\Core\Plugin>
+     */
+    public function keywordsWithClass(): array
+    {
+        return Collection::make($this->classes)
+            ->mapWithKeys(function (string $class) {
+                return [(new $class())->keyWord() => $class];
+            })
+            ->toArray();
+    }
+
+    /**
+     * Get the list of keywords of all the plugins found.
+     *
+     * @return array<int, string>
+     */
     public function keywords(): array
     {
         // TODO: keywords should be retrieved inspecting the class content.. but what if the end user modify the keyword?
-        return Collection::make($this->classes)
-            ->map(function (string $class) {
-                return (new $class())->keyWord();
-            })
-            ->toArray();
+        return array_keys($this->keywordsWithClass());
     }
 
     /**
@@ -97,10 +107,13 @@ class PluginManager
     {
         $input = strtolower(trim($input));
 
-        foreach ($this->plugins as $keyword => $plugin) {
-            if (str_starts_with($input, $keyword)) {
-                return $plugin;
-            }
+        $keyword = Str::of($input)->before(' ')->toString();
+        $arguments = Str::of($input)->after(' ')->toString(); // TODO: it'll have the same value of $keyword if $input doesn't contain a space to separate the arguments
+
+        $class = $this->keywordsWithClass()[$keyword] ?? null;
+
+        if (! is_null($class)) {
+            return new $class();
         }
 
         return null;
