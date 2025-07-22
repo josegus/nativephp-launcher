@@ -1,0 +1,23 @@
+{
+    "name": "tailwindlabs/heroicons-finder",
+    "autoload": {
+        "psr-4": {
+            "TailwindLabs\\HeroiconsFinder\\": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./../../_core",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "gustavo-launcher/core": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
