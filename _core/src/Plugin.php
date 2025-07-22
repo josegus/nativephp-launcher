@@ -11,6 +11,8 @@ interface Plugin
 
     /**
      * Devuelve los resultados que el usuario puede ver al escribir.
+     *
+     * @return array<int, \NativePHPLauncher\Core\Contracts\Items\ResultItem>
      */
     public function handle(string $input): array;
 

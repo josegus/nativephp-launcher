@@ -7,7 +7,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Native\Laravel\Facades\Clipboard;
 use Native\Laravel\Facades\Shell;
+use NativePHPLauncher\Core\Actions\CopyToClipboard;
 use ReflectionClass;
 use TailwindLabs\HeroiconsFinder\HeroiconsFinder;
 
@@ -15,7 +17,12 @@ class Launcher extends Component
 {
     public string $query = 'hi user';
 
-    public array $output = [];
+    /**
+     * List of plugins found for the given query input.
+     *
+     * @var array<int, \NativePHPLauncher\Core\Plugin>
+     */
+    //public array $plugins = [];
 
     //protected ?PluginManager $pluginManager = null;
 
@@ -45,22 +52,92 @@ class Launcher extends Component
         return $this->pluginManager()->keywords();
     }
 
+    #[Computed]
+    public function arguments(): string
+    {
+        return 'user';
+    }
+
+    #[Computed]
+    public function plugins(): array
+    {
+        return [$this->pluginManager()->match($this->query)];
+    }
+
+    /**
+     * Items.
+     *
+     * @return array<int, \NativePHPLauncher\Core\Contracts\Items\ResultItem>
+     */
+    #[Computed]
+    public function items(): array
+    {
+        if (empty($this->plugins)) {
+            return [];
+        }
+
+        $items = [];
+
+        foreach ($this->plugins as $plugin) {
+            // TODO: Must be fixed, it will return an array for each plugin
+            $items = $plugin->handle($this->arguments);
+        }
+
+        return $items;
+    }
+
+    #[Computed]
+    public function output(): array
+    {
+        if (empty($this->plugins)) {
+            return [];
+        }
+
+        $output = [];
+
+        foreach ($this->items as $item) {
+            $output[] = $item->render();
+        }
+
+        return $output;
+    }
+
     // hooks
 
     public function updatedQuery(): void
     {
-        $plugin = $this->pluginManager()->match($this->query);
+        //$this->plugins = [$this->pluginManager()->match($this->query)];
 
-        if (is_null($plugin)) {
+        /* if (empty($plugins)) {
             return;
         }
 
-        $argument = 'user';
+        // Get the ResultItems from the plugins
+        $resultItems = $plugin->handle($argument);
 
-        $this->output = $plugin->handle($argument);
+        $output = [];
+
+        foreach ($resultItems as $item) {
+            $output[] = $item->render();
+        }
+
+        $this->output = $output;
+         */
     }
 
     // actions
+
+    public function executeAction(int $index): void
+    {
+        /** @var \NativePHPLauncher\Core\Contracts\Items\ResultItem */
+        $item = $this->items[$index];
+        $action = $item->action();
+
+        match (true) {
+            $action instanceof CopyToClipboard => Clipboard::text($item->render()),
+            default => null,
+        };
+    }
 
     public function openUrl(): void
     {
