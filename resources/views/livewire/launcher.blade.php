@@ -1,41 +1,43 @@
-<div x-data="{ index: -1 }" class="w-full">
+<div x-data="{ index: -1, max: $wire.entangle('itemsCount') }" class="w-full">
+    <section>
+        <div>index: <span x-text="index"></span></div>
+        <div>max: <span x-text="max"></span></div>
+        <div>trigger: {{ $this->trigger ?: 'n/a' }}</div>
+        <div>arguments: {{ $this->arguments ?: 'n/a' }}</div>
+    </section>
+
     <input
-        wire:model.live.debounce.200ms="query"
-        x-on:keyup.down="index++"
+        wire:model.live.debounce.400ms="query"
+        x-on:keyup.down="index < max - 1 ? index++ : null"
+        x-on:keyup.up="index > 0 ? index-- : null"
         type="text"
         class="w-full bg-white outline-none border border-gray-500 rounded-xs p-4"
         placeholder="Search"
         autofocus
     >
-    <div>
-        <span>query: {{ $query }}</span>|
-        <span x-text="index"></span>
-    </div>
-
-    <div>
-        Commands:
-        <pre>
-            @json($this->keywords)
-        </pre>
-    </div>
 
     <section>
         <ul>
-            @foreach ($this->output as $item)
+            @foreach ($this->items as $item)
                 <li
                     x-trap="index === {{ $loop->index }}"
-                    x-on:keyup.down="index++"
-                    x-on:keyup.up="index--"
                     wire:key="item-{{ $loop->index }}"
                     wire:click="executeAction({{ $loop->index }})"
-                    class="hover:bg-gray-200 border px-6 py-4"
+                    class="flex space-x-4 px-4 py-2 hover:bg-gray-300 cursor-pointer"
+                    :class="index === {{ $loop->index }} ? 'bg-gray-300' : ''"
                 >
-                    {!! $item !!}
+                    <div>
+                        {!! $item->render() !!}
+                    </div>
+                    <div>
+                        <div>{{ $item->name() }}</div>
+                        <div class="text-sm text-gray-500">{{ $item->description() }}</div>
+                    </div>
                 </li>
             @endforeach
         </ul>
-        @unless (empty($this->output))
-            <span class="inline-block mt-2 text-sm text-gray-600">Results found: {{ count($this->output) }}</span>
+        @unless (empty($this->trigger))
+            <span class="inline-block mt-2 text-sm text-gray-600">Results found: {{ count($this->items) }}</span>
         @endunless
     </section>
 </div>

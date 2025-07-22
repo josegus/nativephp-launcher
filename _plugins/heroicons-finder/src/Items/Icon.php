@@ -17,12 +17,12 @@ class Icon implements ResultItem
 
     public function name(): string
     {
-        return 'my icon';
+        return pathinfo($this->filePath, PATHINFO_FILENAME);
     }
 
     public function description(): string
     {
-        return 'my description';
+        return basename($this->filePath);
     }
 
     public function render(): string

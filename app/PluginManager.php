@@ -9,7 +9,7 @@ use NativePHPLauncher\Core\Plugin;
 class PluginManager
 {
     /**
-     * Directories (folders) found that contain the root folder of each plugin.
+     * Root folder of each plugin found.
      *
      * @var array<string>
      */
@@ -21,9 +21,6 @@ class PluginManager
      * @var array<string>
      */
     protected array $classes = [];
-
-    /** @var array<string, \Launcher\Plugin> */
-    protected array $plugins = [];
 
     public function __construct()
     {
@@ -48,6 +45,13 @@ class PluginManager
         }
     }
 
+    /**
+     * Inspect the content of a .php file and get the full
+     * class name (namespace + class) of the file.
+     *
+     * @param string $path
+     * @return string|null
+     */
     private function getFullClassNameFromFile(string $path): ?string
     {
         $contents = file_get_contents($path);
@@ -70,6 +74,21 @@ class PluginManager
         return null;
     }
 
+    /**
+     * Get the directories of plugins.
+     *
+     * @return array<string>
+     */
+    public function directories(): array
+    {
+        return $this->directories;
+    }
+
+    /**
+     * Get the plugin main classes found.
+     *
+     * @return array<string>
+     */
     public function classes(): array
     {
         return $this->classes;
@@ -80,7 +99,7 @@ class PluginManager
      *
      * @return array<string, \NativePHPLauncher\Core\Plugin>
      */
-    public function keywordsWithClass(): array
+    public function hashMap(): array
     {
         return Collection::make($this->classes)
             ->mapWithKeys(function (string $class) {
@@ -97,33 +116,67 @@ class PluginManager
     public function keywords(): array
     {
         // TODO: keywords should be retrieved inspecting the class content.. but what if the end user modify the keyword?
-        return array_keys($this->keywordsWithClass());
+        return array_keys($this->hashMap());
     }
 
-    /**
-     * Devuelve el plugin que coincide con el input del usuario
-     */
-    public function match(string $input): ?Plugin
+     /**
+      * Get the plugins that match the given keyword.
+      *
+      * @param string $keyword
+      * @return array<int, \NativePHPLauncher\Core\Plugin>
+      */
+    public function matches(string $keyword): array
     {
-        $input = strtolower(trim($input));
-
-        $keyword = Str::of($input)->before(' ')->toString();
-        $arguments = Str::of($input)->after(' ')->toString(); // TODO: it'll have the same value of $keyword if $input doesn't contain a space to separate the arguments
-
-        $class = $this->keywordsWithClass()[$keyword] ?? null;
+        $class = $this->hashMap()[$keyword] ?? null;
 
         if (! is_null($class)) {
-            return new $class();
+            return [new $class()];
         }
 
-        return null;
+        return [];
     }
 
     /**
-     * Retorna todos los plugins disponibles
+     * Get the ResultItems of all the plugins that match the given keyword.
+     *
+     * @param string $keyword
+     * @param string $arguments
+     * @return array<int, \NativePHPLauncher\Core\Contracts\Items\ResultItem>
      */
-    public function all(): array
+    public function items(string $keyword, string $arguments = ''): array
     {
-        return $this->plugins;
+        if (empty($plugins = $this->matches($keyword))) {
+            return [];
+        }
+
+        $items = [];
+
+        foreach ($plugins as $plugin) {
+            $items = $plugin->handle($arguments);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $keyword
+     * @param string $arguments
+     * @return array<string>
+     */
+    public function output(string $keyword, string $arguments = ''): array
+    {
+        if (empty($items = $this->items($keyword, $arguments))) {
+            return [];
+        }
+
+        $output = [];
+
+        foreach ($items as $item) {
+            $output[] = $item->render();
+        }
+
+        return $output;
     }
 }

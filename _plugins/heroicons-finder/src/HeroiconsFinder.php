@@ -14,35 +14,16 @@ class HeroiconsFinder implements Plugin
 
     public function handle(string $input): array
     {
-        // $input => cap
         $path = __DIR__.'/../resources/svg/outline' . DIRECTORY_SEPARATOR . "*{$input}*";
         $filePathOccurrencesFound = glob($path);
 
-        $output = [];
+        $results = [];
 
         foreach ($filePathOccurrencesFound as $filePath) {
-            // $svg = file_get_contents($filePath);
-
-            // /* $svg = preg_replace_callback(
-            //     '/class="([^"]*)"/',
-            //     fn ($matches) => 'class="' . trim($matches[1] . ' size-24') . '"',
-            //     $svg
-            // ); */
-
-            // $svg = preg_replace(
-            //     '/<svg\b(?![^>]*\bclass=)/',
-            //     '<svg class="size-12"',
-            //     $svg
-            // );
-
-            // $output[] = <<<HTML
-            //     <div>$svg</div>
-            // HTML;
-
-            $output[] = new Icon($filePath);
+            $results[] = new Icon($filePath);
         }
 
-        return $output;
+        return $results;
     }
 
     /**
