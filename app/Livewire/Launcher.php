@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Native\Laravel\Facades\Clipboard;
-use NativePHPLauncher\Core\Actions\CopyToClipboard;
+use NativePHPLauncher\Core\Abstracts\ClipboardCopyable;
 
 class Launcher extends Component
 {
@@ -69,7 +69,7 @@ class Launcher extends Component
         $action = $item->action();
 
         match (true) {
-            $action instanceof CopyToClipboard => Clipboard::text($item->render()),
+            $action instanceof ClipboardCopyable => Clipboard::text($item->render()),
             default => null,
         };
     }
