@@ -3,7 +3,7 @@
 namespace TailwindLabs\HeroiconsFinder;
 
 use NativePHPLauncher\Core\Plugin;
-use TailwindLabs\HeroiconsFinder\Items\Icon;
+use TailwindLabs\HeroiconsFinder\Items\HeroIconResult;
 
 class HeroiconsFinder implements Plugin
 {
@@ -20,7 +20,7 @@ class HeroiconsFinder implements Plugin
         $results = [];
 
         foreach ($filePathOccurrencesFound as $filePath) {
-            $results[] = new Icon($filePath);
+            $results[] = new HeroIconResult($filePath);
         }
 
         return $results;

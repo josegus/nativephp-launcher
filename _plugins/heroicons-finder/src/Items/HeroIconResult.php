@@ -2,52 +2,56 @@
 
 namespace TailwindLabs\HeroiconsFinder\Items;
 
-use NativePHPLauncher\Core\Actions\CopyToClipboard;
 use NativePHPLauncher\Core\Contracts\Actions\Actionable;
 use NativePHPLauncher\Core\Contracts\Items\ResultItem;
+use TailwindLabs\HeroiconsFinder\Actions\CopyToClipboard;
+use TailwindLabs\HeroiconsFinder\Support\Svg;
 
-class Icon implements ResultItem
+class HeroIconResult implements ResultItem
 {
-    protected ?string $filePath = null;
+    protected ?string $path = null;
+    protected ?Svg $svg = null;
 
     public function __construct(string $path)
     {
-        $this->filePath = $path;
+        $this->path = $path;
+
+        $this->svg = new Svg($path);
     }
 
     public function name(): string
     {
-        return pathinfo($this->filePath, PATHINFO_FILENAME);
+        return $this->svg->filename();
     }
 
     public function description(): string
     {
-        return basename($this->filePath);
+        return basename($this->path);
     }
 
     public function render(): string
     {
-        $svg = file_get_contents($this->filePath);
+        $svgContent = $this->svg->content();
 
-        /* $svg = preg_replace_callback(
+        /* $svgContent = preg_replace_callback(
             '/class="([^"]*)"/',
             fn ($matches) => 'class="' . trim($matches[1] . ' size-24') . '"',
-            $svg
+            $svgContent
         ); */
 
-        $svg = preg_replace(
+        $svgContent = preg_replace(
             '/<svg\b(?![^>]*\bclass=)/',
             '<svg class="size-12"',
-            $svg
+            $svgContent
         );
 
         return <<<HTML
-            <div>$svg</div>
+            <div>$svgContent</div>
         HTML;
     }
 
     public function action(): Actionable
     {
-        return new CopyToClipboard;
+        return new CopyToClipboard($this->svg);
     }
 }
