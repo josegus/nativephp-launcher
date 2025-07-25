@@ -26,7 +26,7 @@
                     class="flex space-x-4 px-4 py-2 hover:bg-gray-300 cursor-pointer"
                     :class="index === {{ $loop->index }} ? 'bg-gray-300' : ''"
                 >
-                    <div>
+                    <div class="size-6">
                         {!! $item->render() !!}
                     </div>
                     <div>

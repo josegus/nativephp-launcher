@@ -22,6 +22,13 @@
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "path",
+            "url": "./_plugins/google-translate",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "require": {
@@ -31,7 +38,8 @@
         "livewire/livewire": "^3.6",
         "nativephp/electron": "^1.1",
         "gustavo-launcher/core": "*",
-        "tailwindlabs/heroicons-finder": "*"
+        "tailwindlabs/heroicons-finder": "*",
+        "ignite/google-translate": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

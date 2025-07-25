@@ -25,12 +25,4 @@ class HeroiconsFinder implements Plugin
 
         return $results;
     }
-
-    /**
-     * Ejecuta la acción al seleccionar una opción.
-     */
-    public function execute(array $data): void
-    {
-
-    }
 }

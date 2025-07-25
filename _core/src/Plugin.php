@@ -15,9 +15,4 @@ interface Plugin
      * @return array<int, \NativePHPLauncher\Core\Contracts\Items\ResultItem>
      */
     public function handle(string $input): array;
-
-    /**
-     * Ejecuta la acción al seleccionar una opción.
-     */
-    public function execute(array $data): void;
 }
