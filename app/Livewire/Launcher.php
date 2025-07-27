@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\PluginManager;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Native\Laravel\Facades\Clipboard;
@@ -41,21 +42,37 @@ class Launcher extends Component
         $query = trim($this->query);
         $trigger = trim($this->trigger);
 
-        return trim($query === '' ? $query : array_reverse(explode($trigger, $query, 2))[0]);
+        $arguments = trim($query === '' ? $query : array_reverse(explode($trigger, $query, 2))[0]);
+
+        if (! $arguments) {
+            return null;
+        }
+
+        putenv("IGNITE_ARGUMENTS=$arguments");
+
+        return $arguments;
+    }
+
+    #[Computed(persist: true)]
+    public function directories(): array
+    {
+        return $this->pluginManager()->directories();
     }
 
     #[Computed]
     public function items(): array
     {
-        if (! is_null($this->trigger)) {
-            $items = $this->pluginManager()->items($this->trigger, $this->arguments);
-
-            $this->itemsCount = count($items);
-
-            return $items;
+        if (is_null($this->trigger) || empty($this->trigger)) {
+            return [];
         }
 
-        return [];
+        $plugins = $this->pluginManager()->plugins();
+
+        $items = collect($plugins)->pluck('items')->flatten(1)->toArray();
+
+        $this->itemsCount = count($items);
+
+        return $items;
     }
 
     // actions

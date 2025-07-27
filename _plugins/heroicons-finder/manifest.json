@@ -1,0 +1,4 @@
+{
+    "trigger": "hi",
+    "command": "php main.php"
+}

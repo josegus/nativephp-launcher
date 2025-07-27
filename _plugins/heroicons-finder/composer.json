@@ -12,11 +12,19 @@
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "path",
+            "url": "./../../_workflow",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "require": {
         "php": "^8.1",
-        "gustavo-launcher/core": "*"
+        "gustavo-launcher/core": "*",
+        "ignite/workflow": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

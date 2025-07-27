@@ -6,6 +6,8 @@
         <div>arguments: {{ $this->arguments ?: 'n/a' }}</div>
     </section>
 
+    <pre>@json($this->directories, JSON_PRETTY_PRINT)</pre>
+
     <input
         wire:model.live.debounce.400ms="query"
         x-on:keyup.down="index < max - 1 ? index++ : null"
@@ -15,6 +17,8 @@
         placeholder="Search"
         autofocus
     >
+
+    {{-- <div>{{ exec('php /Users/gustavovasquez/Sites/nativephp-launcher/_plugins/heroicons-finder/Main.php') }}</div> --}}
 
     <section>
         <ul>
@@ -26,12 +30,12 @@
                     class="flex space-x-4 px-4 py-2 hover:bg-gray-300 cursor-pointer"
                     :class="index === {{ $loop->index }} ? 'bg-gray-300' : ''"
                 >
-                    <div class="size-6">
-                        {!! $item->render() !!}
+                    <div class="max-h-6 max-w-6 size-auto border">
+                        {!! $item['icon'] !!}
                     </div>
                     <div>
-                        <div>{{ $item->name() }}</div>
-                        <div class="text-sm text-gray-500">{{ $item->description() }}</div>
+                        <div>{{ $item['title'] }}</div>
+                        <div class="text-sm text-gray-500">{{ $item['content'] }}</div>
                     </div>
                 </li>
             @endforeach

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use NativePHPLauncher\Core\Plugin;
+use Symfony\Component\Process\Process;
 
 class PluginManager
 {
@@ -16,17 +17,17 @@ class PluginManager
     protected array $directories = [];
 
     /**
-     * Main classes found for each plugin, including full namespace.
+     * Manifests found for each plugin.
      *
      * @var array<string>
      */
-    protected array $classes = [];
+    protected array $manifests = [];
 
     public function __construct()
     {
         $this->loadDirectories();
 
-        $this->loadClasses();
+        $this->loadManifests();
     }
 
     private function loadDirectories(): void
@@ -34,44 +35,19 @@ class PluginManager
         $this->directories = glob(base_path('_plugins/*'));
     }
 
-    private function loadClasses(): void
+    private function loadManifests(): void
     {
-        foreach ($this->directories as $directory) {
-            $classes = glob($directory . '/src/*.php');
+        foreach ($this->directories as $index => $directory) {
+            $manifestExist = file_exists($directory . '/manifest.json');
 
-            if (! empty($classes)) {
-                $this->classes[] = $this->getFullClassNameFromFile($classes[0]);
+            if ($manifestExist) {
+                $this->manifests[] = $directory . '/manifest.json';
+            } else {
+                unset($this->directories[$index]);
+
+                $this->directories = array_values($this->directories);
             }
         }
-    }
-
-    /**
-     * Inspect the content of a .php file and get the full
-     * class name (namespace + class) of the file.
-     *
-     * @param string $path
-     * @return string|null
-     */
-    private function getFullClassNameFromFile(string $path): ?string
-    {
-        $contents = file_get_contents($path);
-
-        $namespace = null;
-        $class = null;
-
-        if (preg_match('/namespace\s+(.+?);/', $contents, $matches)) {
-            $namespace = trim($matches[1]);
-        }
-
-        if (preg_match('/class\s+(\w+)/', $contents, $matches)) {
-            $class = trim($matches[1]);
-        }
-
-        if ($class) {
-            return $namespace ? "$namespace\\$class" : $class;
-        }
-
-        return null;
     }
 
     /**
@@ -89,34 +65,24 @@ class PluginManager
      *
      * @return array<string>
      */
-    public function classes(): array
+    public function manifests(): array
     {
-        return $this->classes;
+        return $this->manifests;
     }
 
     /**
-     * Get the list of keywords with its respective trigger class.
-     *
-     * @return array<string, \NativePHPLauncher\Core\Plugin>
-     */
-    public function hashMap(): array
-    {
-        return Collection::make($this->classes)
-            ->mapWithKeys(function (string $class) {
-                return [(new $class())->keyWord() => $class];
-            })
-            ->toArray();
-    }
-
-    /**
-     * Get the list of keywords of all the plugins found.
+     * Get the list of triggers.
      *
      * @return array<int, string>
      */
-    public function keywords(): array
+    public function triggers(): array
     {
-        // TODO: keywords should be retrieved inspecting the class content.. but what if the end user modify the keyword?
-        return array_keys($this->hashMap());
+        /* return Collection::make($this->classes)
+            ->mapWithKeys(function (string $class) {
+                return [(new $class())->keyWord() => $class];
+            })
+            ->toArray(); */
+        return ['ddd', 'asdf'];
     }
 
      /**
@@ -137,15 +103,13 @@ class PluginManager
     }
 
     /**
-     * Get the ResultItems of all the plugins that match the given keyword.
+     * Get the result items of all the plugins that match the trigger.
      *
-     * @param string $keyword
-     * @param string $arguments
-     * @return array<int, \NativePHPLauncher\Core\Contracts\Items\ResultItem>
+     * @return array<int, array>
      */
-    public function items(string $keyword, string $arguments = ''): array
+    public function plugins(): array
     {
-        if (empty($plugins = $this->matches($keyword))) {
+        /* if (empty($plugins = $this->matches())) {
             return [];
         }
 
@@ -155,7 +119,27 @@ class PluginManager
             $items = $plugin->handle($arguments);
         }
 
-        return $items;
+        return $items; */
+
+        $plugins = [];
+
+        foreach ($this->manifests as $manifestPath) {
+            $pluginDir = dirname($manifestPath);
+            $manifest = json_decode(file_get_contents($manifestPath), true);
+            $command = $manifest['command'];
+            $commandParts = explode(' ', $command); // ['php', 'main.php']
+            $process = new Process($commandParts, $pluginDir);
+            $process->run();
+
+            // Capturar salida
+            if ($process->isSuccessful()) {
+                $plugins[] = json_decode($process->getOutput(), true);
+            } else {
+                //echo $process->getErrorOutput();
+            }
+        }
+
+        return $plugins;
     }
 
     /**

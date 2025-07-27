@@ -46,7 +46,7 @@ class HeroIconResult implements ResultItem
         );
 
         return <<<HTML
-            <div>$svgContent</div>
+            $svgContent
         HTML;
     }
 
