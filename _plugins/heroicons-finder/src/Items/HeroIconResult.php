@@ -7,7 +7,7 @@ use NativePHPLauncher\Core\Contracts\Items\ResultItem;
 use TailwindLabs\HeroiconsFinder\Actions\CopyToClipboard;
 use TailwindLabs\HeroiconsFinder\Support\Svg;
 
-class HeroIconResult implements ResultItem
+class HeroIconResult
 {
     protected ?string $path = null;
     protected ?Svg $svg = null;
@@ -41,17 +41,12 @@ class HeroIconResult implements ResultItem
 
         $svgContent = preg_replace(
             '/<svg\b(?![^>]*\bclass=)/',
-            '<svg class="size-12"',
+            '<svg __class="size-12"',
             $svgContent
         );
 
         return <<<HTML
             $svgContent
         HTML;
-    }
-
-    public function action(): Actionable
-    {
-        return new CopyToClipboard($this->svg);
     }
 }
