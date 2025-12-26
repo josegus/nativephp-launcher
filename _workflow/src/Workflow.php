@@ -5,9 +5,9 @@ namespace Ignite\Workflow;
 class Workflow
 {
     /**
-     * Undocumented variable
+     * Items show as the result of the input search.
      *
-     * @var array<int, array[icon, title, content, action]>
+     * @var array<int, array[icon, title, description, content, action]>
      */
     protected array $items = [];
 
@@ -17,9 +17,9 @@ class Workflow
     }
 
     /**
-     * {icon, title, content, action}
+     * Get the list of items that will be shown as the result of the search.
      *
-     * @param array<int, string> $items
+     * @param array<int, array[icon, title, description, content, action]> $items
      * @return self
      */
     public function items(array $items): self
@@ -29,6 +29,11 @@ class Workflow
         return $this;
     }
 
+    /**
+     * Get the encoded output.
+     *
+     * @return string
+     */
     public function output(): string
     {
         $output = [

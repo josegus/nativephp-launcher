@@ -10,7 +10,7 @@ $workflow = new Workflow;
 // find
 $input = $workflow->input();
 $finder = new HeroiconsFinder;
-$items = $finder->results($input);
+$items = $finder->getIcons($input);
 
 // arrange
 $workflow->items($items);

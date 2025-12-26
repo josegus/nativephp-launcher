@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use NativePHPLauncher\Core\Plugin;
@@ -51,7 +52,7 @@ class PluginManager
     }
 
     /**
-     * Get the directories of plugins.
+     * Get list of directories found.
      *
      * @return array<string>
      */
@@ -61,7 +62,7 @@ class PluginManager
     }
 
     /**
-     * Get the plugin main classes found.
+     * Get the list of manifests found.
      *
      * @return array<string>
      */
@@ -70,37 +71,37 @@ class PluginManager
         return $this->manifests;
     }
 
-    /**
-     * Get the list of triggers.
-     *
-     * @return array<int, string>
-     */
-    public function triggers(): array
-    {
-        /* return Collection::make($this->classes)
-            ->mapWithKeys(function (string $class) {
-                return [(new $class())->keyWord() => $class];
-            })
-            ->toArray(); */
-        return ['ddd', 'asdf'];
-    }
+    // /**
+    //  * Get the list of triggers.
+    //  *
+    //  * @return array<int, string>
+    //  */
+    // public function triggers(): array
+    // {
+    //     /* return Collection::make($this->classes)
+    //         ->mapWithKeys(function (string $class) {
+    //             return [(new $class())->keyWord() => $class];
+    //         })
+    //         ->toArray(); */
+    //     return ['ddd', 'asdf'];
+    // }
 
-     /**
-      * Get the plugins that match the given keyword.
-      *
-      * @param string $keyword
-      * @return array<int, \NativePHPLauncher\Core\Plugin>
-      */
-    public function matches(string $keyword): array
-    {
-        $class = $this->hashMap()[$keyword] ?? null;
+    //  /**
+    //   * Get the plugins that match the given keyword.
+    //   *
+    //   * @param string $keyword
+    //   * @return array<int, \NativePHPLauncher\Core\Plugin>
+    //   */
+    // public function matches(string $keyword): array
+    // {
+    //     $class = $this->hashMap()[$keyword] ?? null;
 
-        if (! is_null($class)) {
-            return [new $class()];
-        }
+    //     if (! is_null($class)) {
+    //         return [new $class()];
+    //     }
 
-        return [];
-    }
+    //     return [];
+    // }
 
     /**
      * Get the result items of all the plugins that match the trigger.
@@ -135,6 +136,8 @@ class PluginManager
             if ($process->isSuccessful()) {
                 $plugins[] = json_decode($process->getOutput(), true);
             } else {
+                throw new Exception($process->getOutput() ?? 'Plugin Manager process error');
+                //dd($process->getOutput());
                 //echo $process->getErrorOutput();
             }
         }
@@ -142,25 +145,25 @@ class PluginManager
         return $plugins;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $keyword
-     * @param string $arguments
-     * @return array<string>
-     */
-    public function output(string $keyword, string $arguments = ''): array
-    {
-        if (empty($items = $this->items($keyword, $arguments))) {
-            return [];
-        }
+    // /**
+    //  * Undocumented function
+    //  *
+    //  * @param string $keyword
+    //  * @param string $arguments
+    //  * @return array<string>
+    //  */
+    // public function output(string $keyword, string $arguments = ''): array
+    // {
+    //     if (empty($items = $this->items($keyword, $arguments))) {
+    //         return [];
+    //     }
 
-        $output = [];
+    //     $output = [];
 
-        foreach ($items as $item) {
-            $output[] = $item->render();
-        }
+    //     foreach ($items as $item) {
+    //         $output[] = $item->render();
+    //     }
 
-        return $output;
-    }
+    //     return $output;
+    // }
 }

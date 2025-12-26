@@ -2,11 +2,16 @@
     <section>
         <div>index: <span x-text="index"></span></div>
         <div>max: <span x-text="max"></span></div>
-        <div>trigger: {{ $this->trigger ?: 'n/a' }}</div>
-        <div>arguments: {{ $this->arguments ?: 'n/a' }}</div>
-    </section>
+        <div>trigger: {{ $trigger ?: 'n/a' }}</div>
+        <div>arguments: {{ $arguments ?: 'n/a' }}</div>
+        <div>
+            directories:
 
-    <pre>@json($this->directories, JSON_PRETTY_PRINT)</pre>
+            <pre>@json($this->directories, JSON_PRETTY_PRINT)</pre>
+        </div>
+    </section>
+    <pre>@json($items ?? ['def'])</pre>
+    <div>{{ count($items) }}</div>
 
     <input
         wire:model.live.debounce.400ms="query"
@@ -18,11 +23,9 @@
         autofocus
     >
 
-    {{-- <div>{{ exec('php /Users/gustavovasquez/Sites/nativephp-launcher/_plugins/heroicons-finder/Main.php') }}</div> --}}
-
     <section>
         <ul>
-            @foreach ($this->items as $item)
+            @foreach ($items as $item)
                 <li
                     x-trap="index === {{ $loop->index }}"
                     wire:key="item-{{ $loop->index }}"
@@ -35,13 +38,13 @@
                     </div>
                     <div>
                         <div>{{ $item['title'] }}</div>
-                        <div class="text-sm text-gray-500">{{ $item['content'] }}</div>
+                        <div class="text-sm text-gray-500">{{ $item['description'] ?? '' }}</div>
                     </div>
                 </li>
             @endforeach
         </ul>
         @unless (empty($this->trigger))
-            <span class="inline-block mt-2 text-sm text-gray-600">Results found: {{ count($this->items) }}</span>
+            <span class="inline-block mt-2 text-sm text-gray-600">Results found: {{ count($items) }}</span>
         @endunless
     </section>
 </div>
