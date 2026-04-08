@@ -136,7 +136,7 @@ class PluginManager
             if ($process->isSuccessful()) {
                 $plugins[] = json_decode($process->getOutput(), true);
             } else {
-                throw new Exception($process->getOutput() ?? 'Plugin Manager process error');
+                throw new Exception($process->getErrorOutput() ?? 'Plugin Manager process error');
                 //dd($process->getOutput());
                 //echo $process->getErrorOutput();
             }
