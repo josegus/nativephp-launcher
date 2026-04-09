@@ -1,24 +1,32 @@
-<div x-data="{ index: -1, max: $wire.entangle('itemsCount') }" class="w-full">
-    <section>
-        <div>index: <span x-text="index"></span></div>
-        <div>max: <span x-text="max"></span></div>
-        <div>trigger: {{ $trigger ?: 'n/a' }}</div>
-        <div>arguments: {{ $arguments ?: 'n/a' }}</div>
-        <div>
-            directories:
-
-            <pre>@json($this->directories, JSON_PRETTY_PRINT)</pre>
-        </div>
+<div x-data="{
+    index: -1,
+    max: $wire.entangle('itemsCount'),
+    showDetails: false
+}" class="w-full">
+    <section class="text-sm mb-4">
+        <button x-on:click="showDetails = !showDetails" class="cursor-pointer">
+            <span x-show="showDetails">Hide</span>
+            <span x-show="showDetails === false">Show</span>
+            details
+        </button>
+        <ul x-show="showDetails" class="list-disc list-inside border border-gray-400 p-2 bg-white">
+            <li>index: <span x-text="index"></span></li>
+            <li>max: <span x-text="max"></span></li>
+            <li>trigger: {{ $trigger ?: 'n/a' }}</li>
+            <li>arguments: {{ $arguments ?: 'n/a' }}</li>
+            <li>
+                directories:
+                <pre class="ml-4">@json($this->directories, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)</pre>
+            </li>
+        </ul>
     </section>
-    <pre>@json($items ?? ['def'])</pre>
-    <div>{{ count($items) }}</div>
 
     <input
         wire:model.live.debounce.400ms="query"
         x-on:keyup.down="index < max - 1 ? index++ : null"
         x-on:keyup.up="index > 0 ? index-- : null"
         type="text"
-        class="w-full bg-white outline-none border border-gray-500 rounded-xs p-4"
+        class="w-full bg-white outline-none border border-gray-500 rounded-xs p-4 fixed"
         placeholder="Search"
         autofocus
     >
