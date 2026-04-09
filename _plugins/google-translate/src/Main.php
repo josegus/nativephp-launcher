@@ -2,16 +2,11 @@
 
 namespace Ignite\GoogleTranslate;
 
-use NativePHPLauncher\Core\Plugin;
+use Ignite\Workflow\Enums\Actions;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
-class Main implements Plugin
+class Main
 {
-    public function keyword(): string
-    {
-        return 'gt';
-    }
-
     /**
      * Devuelve los resultados que el usuario puede ver al escribir.
      *
@@ -24,8 +19,14 @@ class Main implements Plugin
         // TODO: Catch exceptions
         $translatedText = $tr->translate($input);
 
-        $results = [
-            new TranslateItem($translatedText)
+        $item = new TranslateItem($translatedText);
+
+        $results[] = [
+            'icon' => $item->render(),
+            'title' => $item->name(),
+            'description' => $item->description(),
+            'content' => $item->render(),
+            'action' => Actions::COPY_TO_CLIPBOARD,
         ];
 
         return $results;

@@ -1,0 +1,4 @@
+{
+    "trigger": "gt",
+    "command": "php main.php"
+}

@@ -4,30 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d206d50dfc341c797a38b363dfd8343a",
+    "content-hash": "d0312c6b59901c840e777fc296715873",
     "packages": [
-        {
-            "name": "gustavo-launcher/core",
-            "version": "dev-feature/json-workflow",
-            "dist": {
-                "type": "path",
-                "url": "./../../_core",
-                "reference": "d8fb0f5d6bbcfe8b26bf018a5e19be547dcc629b"
-            },
-            "require": {
-                "php": "^8.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "NativePHPLauncher\\Core\\": "src/"
-                }
-            },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
         {
             "name": "ignite/workflow",
             "version": "dev-feature/json-workflow",

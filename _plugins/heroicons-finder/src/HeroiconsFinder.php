@@ -3,30 +3,10 @@
 namespace TailwindLabs\HeroiconsFinder;
 
 use Ignite\Workflow\Enums\Actions;
-use NativePHPLauncher\Core\Plugin;
-use TailwindLabs\HeroiconsFinder\Items\HeroIconResult;
+use TailwindLabs\HeroiconsFinder\Support\HeroIconResult;
 
 class HeroiconsFinder
 {
-    public function __getIcons(): array
-    {
-        $results = [];
-        $results[] = [
-            'icon' => '$item->render()',
-            'title' => '$item->name()',
-            'content' => '$item->description()',
-            'action' => 'Actions::COPY_TO_CLIPBOARD',
-        ];
-        $results[] = [
-            'icon' => '$item->render()',
-            'title' => '$item->name()',
-            'content' => '$item->description()',
-            'action' => 'Actions::COPY_TO_CLIPBOARD',
-        ];
-
-        return $results;
-    }
-
     public function getIcons(string $input): array
     {
         try {

@@ -3,9 +3,6 @@
 namespace App;
 
 use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use NativePHPLauncher\Core\Plugin;
 use Symfony\Component\Process\Process;
 
 class PluginManager
@@ -110,6 +107,7 @@ class PluginManager
      */
     public function plugins(): array
     {
+        // TODO: Match triggers not working
         /* if (empty($plugins = $this->matches())) {
             return [];
         }

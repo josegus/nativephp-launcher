@@ -2,11 +2,7 @@
 
 namespace Ignite\GoogleTranslate;
 
-use Ignite\GoogleTranslate\Actions\CopyToCliboard;
-use NativePHPLauncher\Core\Contracts\Actions\Actionable;
-use NativePHPLauncher\Core\Contracts\Items\ResultItem;
-
-class TranslateItem implements ResultItem
+class TranslateItem
 {
     public ?string $translatedText = null;
 
@@ -28,16 +24,11 @@ class TranslateItem implements ResultItem
     // This is equivalent to the icon
     public function render(): string
     {
-        $icon = __DIR__.'/../resources/images/icon.png';
+        // TODO: Fix icon
+        //$icon = __DIR__.'/../resources/images/icon.png';
 
         return <<<HTML
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Google_Translate_logo.svg/512px-Google_Translate_logo.svg.png">
-            <!-- <img src="$icon"> -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Google_Translate_logo.svg/960px-Google_Translate_logo.svg.png">
         HTML;
-    }
-
-    public function action(): Actionable
-    {
-        return new CopyToCliboard($this->translatedText);
     }
 }

@@ -1,11 +1,6 @@
 <?php
 
-namespace TailwindLabs\HeroiconsFinder\Items;
-
-use NativePHPLauncher\Core\Contracts\Actions\Actionable;
-use NativePHPLauncher\Core\Contracts\Items\ResultItem;
-use TailwindLabs\HeroiconsFinder\Actions\CopyToClipboard;
-use TailwindLabs\HeroiconsFinder\Support\Svg;
+namespace TailwindLabs\HeroiconsFinder\Support;
 
 class HeroIconResult
 {
